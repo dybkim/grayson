@@ -47,6 +47,7 @@ class Wheel_Encoder(Sensor):
     def sense(self, is_running):
         tick_count = 0  # Initialize tick_count to 0
         deltaT = 0.0
+        total_time = 0
         self.current_time = time.time()
         while True:  # Infinitely loops and measures angular velocity
             if not is_running():  # is_running() is a boolean but is passed as a lambda when the thread is created
@@ -62,8 +63,9 @@ class Wheel_Encoder(Sensor):
             deltaT += now - self.current_time  # Calculate time from previous loop and add to deltaT
 
             if deltaT >= self.period:  # If enough time passed by for one period
-                self.measured_value = Measured_Value(self.sensor_key, [(tick_count / 8.0) / (deltaT), tick_count],  deltaT)  # Calculate revolutions per second (rev/s) by taking (ticks/8/seconds)
-#                 tick_count = 0  # Reset tick_count
+                total_time += deltaT
+                self.measured_value = Measured_Value(self.sensor_key, [(tick_count)/ (total_time), tick_count],  deltaT)  # [key, [rad/s, ticks], deltaT]
+                #tick_count = 0  # Reset tick_count
                 deltaT = 0  # Reset deltaT
                 self.callback()
 

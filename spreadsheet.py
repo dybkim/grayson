@@ -29,7 +29,7 @@ class Wheel_Encoder_Data_Spreadsheet_Strategy(Data_Spreadsheet_Strategy):
     def write_to_file(self):
         with open(self.file_path, 'w') as csvfile:
             filewriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            filewriter.writerow(['Time (Total): (s)', 'time (delta): (s)', 'Ticks: (ticks / s)', 'Revolutions: (rev / s)'])
+            filewriter.writerow(['Time (Total): (s)', 'time (delta): (s)', 'Ticks: (ticks total)', 'Average ticks: (ticks / s)'])
             
             for i in range(len(self.test_data.measured_values)):
                 
@@ -39,7 +39,7 @@ class Wheel_Encoder_Data_Spreadsheet_Strategy(Data_Spreadsheet_Strategy):
                 else:
                     measured_value = self.test_data.measured_values[i]
                     total_time = self.test_data.measured_times[i]
-                    filewriter.writerow([total_time, measured_value.deltaT, measured_value.data[0], measured_value.data[1]])
+                    filewriter.writerow([total_time, measured_value.deltaT, measured_value.data[1], measured_value.data[0]])
         
         
 

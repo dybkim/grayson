@@ -56,7 +56,8 @@ class BNO055(Sensor):
         return self.measured_value
     
     def callback(self):
-        self.sensor_state_manager.handle_callback(Callback(self.sensor_key, self.measured_value))    # callback sends measured value to observers, and makes observers handle the sent callback
+        for observer in self.observers:
+            observer.handle_callback(Callback(self.sensor_key, self.measured_value))    # callback sends measured value to observers, and makes observers handle the sent callback
     
     def add_observer(self, observer):
         if observer not in self.observers:
